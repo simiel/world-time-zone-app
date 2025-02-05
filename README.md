@@ -130,6 +130,10 @@ The application includes:
 
 ## Browser Support
 
+https://github.com/user-attachments/assets/fb98be7b-8854-4479-bd7d-e3f9285dbdb2
+
+
+
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
