@@ -1,4 +1,3 @@
-````markdown:/Users/samuelmensa/Downloads/world-time-zone-app/README.md
 # World Time Zone App
 
 A NextJS application that displays and manages multiple time zones with adjustable offsets.
@@ -13,6 +12,8 @@ A NextJS application that displays and manages multiple time zones with adjustab
 - Individual clock controls
 - Automatic time synchronization
 - Offline fallback support
+
+  https://github.com/user-attachments/assets/fb98be7b-8854-4479-bd7d-e3f9285dbdb2
 
 ## Prerequisites
 
@@ -130,7 +131,6 @@ The application includes:
 - Optimized re-rendering
 
 ## Browser Support
-
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
