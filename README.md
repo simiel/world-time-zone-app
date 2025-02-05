@@ -1,4 +1,3 @@
-````markdown:/Users/samuelmensa/Downloads/world-time-zone-app/README.md
 # World Time Zone App
 
 A NextJS application that displays and manages multiple time zones with adjustable offsets.
