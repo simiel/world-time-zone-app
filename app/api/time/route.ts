@@ -12,6 +12,7 @@ async function getTimeForZone(
     );
     if (!response.ok) throw new Error("Failed to fetch time");
     const data = await response.json();
+    console.log("🚀 ~ data1:", zone, data);
     return { time: data.datetime, isLive: true };
   } catch (error) {
     console.error(`Error fetching time for ${zone}:`, error);

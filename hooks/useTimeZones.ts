@@ -19,7 +19,18 @@ export function useTimeZones(initialZones: string[]) {
       const response = await fetch(`/api/time?${query}`)
       if (!response.ok) throw new Error("Failed to fetch times")
       const data = await response.json()
-      setTimes(data)
+      
+      // Ensure each timezone has its own distinct time
+      const processedData: Record<string, TimeData> = {}
+      for (const zone of timeZones) {
+        if (data[zone]) {
+          processedData[zone] = {
+            time: new Date(data[zone].time).toISOString(),
+            isLive: data[zone].isLive
+          }
+        }
+      }
+      setTimes(processedData)
     } catch (error) {
       console.error("Error fetching times:", error)
     } finally {
