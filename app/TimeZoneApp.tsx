@@ -1,46 +1,53 @@
-"use client"
-
-import { useState, useCallback } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Clock } from "@/components/Clock"
-import { LoadingOverlay } from "@/components/LoadingOverlay"
-import { useTimeZones } from "@/hooks/useTimeZones"
-import { useDebouncedCallback } from "use-debounce"
-import type React from "react"
+"use client";
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Clock } from "@/components/Clock";
+import { LoadingOverlay } from "@/components/LoadingOverlay";
+import { useTimeZones } from "@/hooks/useTimeZones";
+import { useDebouncedCallback } from "use-debounce";
+import type React from "react";
 
 interface TimeZoneAppProps {
-  initialTimeZones: string[]
+  initialTimeZones: string[];
 }
 
 export default function TimeZoneApp({ initialTimeZones }: TimeZoneAppProps) {
-  const { timeZones, times, offset, setOffset, addTimeZone, removeTimeZone, isLoading } = useTimeZones(initialTimeZones)
-  const [newZone, setNewZone] = useState("")
-  const [localOffset, setLocalOffset] = useState(offset.toString())
+  const {
+    timeZones,
+    times,
+    offset,
+    setOffset,
+    addTimeZone,
+    removeTimeZone,
+    isLoading,
+  } = useTimeZones(initialTimeZones);
+  const [newZone, setNewZone] = useState("");
+  const [localOffset, setLocalOffset] = useState(offset.toString());
 
   const debouncedSetOffset = useDebouncedCallback((value: number) => {
-    setOffset(value)
-  }, 300)
+    setOffset(value);
+  }, 300);
 
   const handleAddTimeZone = useCallback(
     (e: React.FormEvent) => {
-      e.preventDefault()
-      addTimeZone(newZone)
-      setNewZone("")
+      e.preventDefault();
+      addTimeZone(newZone);
+      setNewZone("");
     },
-    [addTimeZone, newZone],
-  )
+    [addTimeZone, newZone]
+  );
 
   const handleOffsetChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newOffset = e.target.value
-      setLocalOffset(newOffset)
-      debouncedSetOffset(Number(newOffset) || 0)
+      const newOffset = e.target.value;
+      setLocalOffset(newOffset);
+      debouncedSetOffset(Number(newOffset) || 0);
     },
-    [debouncedSetOffset],
-  )
+    [debouncedSetOffset]
+  );
 
   return (
     <div>
@@ -53,6 +60,8 @@ export default function TimeZoneApp({ initialTimeZones }: TimeZoneAppProps) {
             time={times[zone]?.time || ""}
             isLive={times[zone]?.isLive || false}
             onRemove={() => removeTimeZone(zone)}
+            offset={offset}
+            onOffsetChange={handleOffsetChange}
           />
         ))}
       </div>
@@ -61,7 +70,10 @@ export default function TimeZoneApp({ initialTimeZones }: TimeZoneAppProps) {
           <CardTitle>Add Time Zone</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleAddTimeZone} className="flex items-end space-x-2">
+          <form
+            onSubmit={handleAddTimeZone}
+            className="flex items-end space-x-2"
+          >
             <div className="flex-grow">
               <Label htmlFor="newZone">Time Zone</Label>
               <Input
@@ -82,11 +94,16 @@ export default function TimeZoneApp({ initialTimeZones }: TimeZoneAppProps) {
         <CardContent>
           <div className="flex items-center space-x-2">
             <Label htmlFor="offset">Offset (minutes)</Label>
-            <Input id="offset" type="number" value={localOffset} onChange={handleOffsetChange} className="w-24" />
+            <Input
+              id="offset"
+              type="number"
+              value={localOffset}
+              onChange={handleOffsetChange}
+              className="w-24"
+            />
           </div>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

@@ -1,7 +1,13 @@
-import { Suspense } from "react"
-import TimeZoneApp from "./TimeZoneApp"
+import { Suspense } from "react";
+import TimeZoneApp from "./TimeZoneApp";
 
-const initialTimeZones = ["America/New_York", "Europe/London", "Asia/Tokyo", "Australia/Sydney", "Pacific/Auckland"]
+const initialTimeZones = [
+  "Africa/Accra",
+  "Asia/Kolkata",
+  "America/New_York",
+  "Europe/London",
+  "Australia/Sydney",
+];
 
 export default function Home() {
   return (
@@ -11,6 +17,5 @@ export default function Home() {
         <TimeZoneApp initialTimeZones={initialTimeZones} />
       </Suspense>
     </main>
-  )
+  );
 }
-
