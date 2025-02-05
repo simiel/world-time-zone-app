@@ -1,87 +1,79 @@
-import { useState, useEffect, useCallback } from "react"
-import { adjustTime } from "@/lib/timeUtils"
+import { useState, useEffect, useCallback } from "react";
+import { adjustTime } from "@/lib/timeUtils";
 
 interface TimeData {
-  time: string
-  isLive: boolean
+  time: string;
+  isLive: boolean;
 }
 
 export function useTimeZones(initialZones: string[]) {
-  const [timeZones, setTimeZones] = useState(initialZones)
-  const [times, setTimes] = useState<Record<string, TimeData>>({})
-  const [offset, setOffset] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [timeZones, setTimeZones] = useState(initialZones);
+  const [times, setTimes] = useState<Record<string, TimeData>>({});
+  const [offset, setOffset] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchTimes = useCallback(async () => {
-    setIsLoading(true)
-    const query = new URLSearchParams({ zones: timeZones.join(",") }).toString()
+    setIsLoading(true);
+    const query = new URLSearchParams({
+      zones: timeZones.join(","),
+    }).toString();
     try {
-      const response = await fetch(`/api/time?${query}`)
-      if (!response.ok) throw new Error("Failed to fetch times")
-      const data = await response.json()
-      
-      // Ensure each timezone has its own distinct time
-      const processedData: Record<string, TimeData> = {}
-      for (const zone of timeZones) {
-        if (data[zone]) {
-          processedData[zone] = {
-            time: new Date(data[zone].time).toISOString(),
-            isLive: data[zone].isLive
-          }
-        }
-      }
-      setTimes(processedData)
+      const response = await fetch(`/api/time?${query}`);
+      if (!response.ok) throw new Error("Failed to fetch times");
+      const data = await response.json();
+      console.log("🚀 ~ fetchTimes ~ data:", data);
+      setTimes(data);
     } catch (error) {
-      console.error("Error fetching times:", error)
+      console.error("Error fetching times:", error);
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }, [timeZones])
+  }, [timeZones]);
 
   useEffect(() => {
-    fetchTimes()
-    const fetchInterval = setInterval(fetchTimes, 60000) // Fetch from server every minute
+    fetchTimes();
+    const fetchInterval = setInterval(fetchTimes, 60000); // Fetch from server every minute
 
     const updateInterval = setInterval(() => {
       setTimes((prevTimes) => {
-        const newTimes: Record<string, TimeData> = {}
+        const newTimes: Record<string, TimeData> = {};
         for (const [zone, data] of Object.entries(prevTimes)) {
-          const date = new Date(data.time)
-          date.setSeconds(date.getSeconds() + 1)
-          newTimes[zone] = { ...data, time: date.toISOString() }
+          const date = new Date(data.time);
+          date.setSeconds(date.getSeconds() + 1);
+          newTimes[zone] = { ...data, time: date.toISOString() };
         }
-        return newTimes
-      })
-    }, 1000) // Update every second
+        return newTimes;
+      });
+    }, 1000); // Update every second
 
     return () => {
-      clearInterval(fetchInterval)
-      clearInterval(updateInterval)
-    }
-  }, [fetchTimes])
+      clearInterval(fetchInterval);
+      clearInterval(updateInterval);
+    };
+  }, [fetchTimes]);
 
   const getAdjustedTimes = useCallback(() => {
-    if (offset === 0) return times
-    const adjustedTimes: Record<string, TimeData> = {}
+    if (offset === 0) return times;
+    const adjustedTimes: Record<string, TimeData> = {};
     for (const [zone, data] of Object.entries(times)) {
-      adjustedTimes[zone] = { ...data, time: adjustTime(data.time, offset) }
+      adjustedTimes[zone] = { ...data, time: adjustTime(data.time, offset) };
     }
-    return adjustedTimes
-  }, [times, offset])
+    return adjustedTimes;
+  }, [times, offset]);
 
   const addTimeZone = useCallback(
     (newZone: string) => {
       if (newZone && !timeZones.includes(newZone)) {
-        setTimeZones((prev) => [...prev, newZone])
-        setIsLoading(true) // Set loading to true when adding a new time zone
+        setTimeZones((prev) => [...prev, newZone]);
+        setIsLoading(true); // Set loading to true when adding a new time zone
       }
     },
-    [timeZones],
-  )
+    [timeZones]
+  );
 
   const removeTimeZone = useCallback((zone: string) => {
-    setTimeZones((prev) => prev.filter((tz) => tz !== zone))
-  }, [])
+    setTimeZones((prev) => prev.filter((tz) => tz !== zone));
+  }, []);
 
   return {
     timeZones,
@@ -91,6 +83,5 @@ export function useTimeZones(initialZones: string[]) {
     addTimeZone,
     removeTimeZone,
     isLoading,
-  }
+  };
 }
-

@@ -51,7 +51,9 @@ export function Clock({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold">{formatTime(currentTime)}</div>
+        <div className="text-2xl font-bold">
+          {formatTime(currentTime, zone)}
+        </div>
       </CardContent>
     </Card>
   );
