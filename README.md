@@ -13,6 +13,8 @@ A NextJS application that displays and manages multiple time zones with adjustab
 - Automatic time synchronization
 - Offline fallback support
 
+  https://github.com/user-attachments/assets/fb98be7b-8854-4479-bd7d-e3f9285dbdb2
+
 ## Prerequisites
 
 - Node.js 18 or higher
@@ -129,11 +131,6 @@ The application includes:
 - Optimized re-rendering
 
 ## Browser Support
-
-https://github.com/user-attachments/assets/fb98be7b-8854-4479-bd7d-e3f9285dbdb2
-
-
-
 - Chrome (latest)
 - Firefox (latest)
 - Safari (latest)
